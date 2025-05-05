@@ -179,8 +179,6 @@ COPY public.floors (parkinglot_id, floor_id, floor_name) FROM stdin;
 --
 
 COPY public.parking_sessions (ticket_id, parkinglot_id, floor_id, row_id, slot_id, vehicle_reg_no, user_id, start_time, end_time) FROM stdin;
-TKT-1-1746401266	1	1	1	1	ABC1234	1	2025-05-05 04:57:46.222653	2025-05-05 05:16:44.054168
-TKT-2-1746405489	1	1	1	2	ABC1234	1	2025-05-05 06:08:09.247042	\N
 \.
 
 
@@ -275,7 +273,7 @@ COPY public.parkinglots_details (parkinglot_id, parking_name, city, landmark, ad
 85	Barakhamba Road - ECE House	New Delhi	Barakhamba Road, CP	ECE house, near by HDFC bank, Barakhamba road, CP	28.629724	77.225735	Open - Road Side	Not known	Cemented	No	No	No ticket	Multi gates for Entry as well as Exit	Open All Days	12:00:00 AM - 11:59:00 AM	Car	30	30	0	0	Free	Free Parking	Free parking.	Free parking.	No such option	No	No
 86	Barakhamba Road - Statesmen House	New Delhi	Barakhamba Road	Statesmen house back, near by axis bank, Barakhamba road,  CP	28.6305245	77.2241101	Open - Covered bounderies	Govt - Subcontracted	Cemented	No	No	Mobile App having Blue Tooth Printer	Single entry gate and Single exit gate	Open All Days	08:00:00 AM - 11:00:00 PM	Car, 2 Weelers	80	80	150	150	Paid	Cash	20 per hour, max 100	Rs 10 per hour, max 100	Monthly Pass	No	Charges on monthly passes only for 22 days, not for the  entire month.
 87	Gopaldas ARDEE -  Indira Red Light	New Delhi	Barakhamba Road, CP	Gopaldas ARDEE, on Indira red light, Barakhamba road, CP	28.631343	77.223397	Open - Road Side	Govt - Subcontracted	Cemented	No	No	Mobile App having Blue Tooth Printer	Multi gates for Entry as well as Exit	Open All Days	08:00:00 AM - 11:00:00 PM	Car, 2 Weelers	60	60	10	10	Paid	Cash	20 rs for 1st hour, max 100	10rs for 1st hour, 50 max	Monthly Pass	No	Charges on monthly passes only for 22 days, not for the entire month.
-1	Jahangirpuri - Metro Authorised Parking	New Delhi	Jahangirpuri	Jahangir puri metro, Patking agency- m/s manoj computer	28.72542191	77.16333008	Open - Covered bounderies	Govt - Subcontracted	Cemented	No	yes	Stand Alone printer	Multi gates for Entry as well as Exit	Open All Days	06:00:00 AM - 11:00:00 PM	Car, 2 Weelers	200	199	500	500	Paid	Cash	20 up to 6 hours, 30 for 12 hours	10 up to 6 hours, 15 up to 12	Monthly Pass	No	No
+1	Jahangirpuri - Metro Authorised Parking	New Delhi	Jahangirpuri	Jahangir puri metro, Patking agency- m/s manoj computer	28.72542191	77.16333008	Open - Covered bounderies	Govt - Subcontracted	Cemented	No	yes	Stand Alone printer	Multi gates for Entry as well as Exit	Open All Days	06:00:00 AM - 11:00:00 PM	Car, 2 Weelers	200	200	500	500	Paid	Cash	20 up to 6 hours, 30 for 12 hours	10 up to 6 hours, 15 up to 12	Monthly Pass	No	No
 \.
 
 
@@ -312,13 +310,13 @@ COPY public.rows (parkinglot_id, floor_id, row_id, row_name) FROM stdin;
 --
 
 COPY public.slots (parkinglot_id, floor_id, row_id, slot_id, slot_name, status, vehicle_reg_no, ticket_id) FROM stdin;
+1	1	1	2	A2	0	\N	\N
 1	1	1	3	A3	0	\N	\N
 1	1	1	1	A1	0	\N	\N
-1	1	1	2	A2	1	ABC1234	TKT-2-1746405489
 1	1	1	4	A4	0	\N	\N
 1	1	1	5	A5	0	\N	\N
-1	1	1	6	A6	0	\N	\N
 1	1	1	7	A7	0	\N	\N
+1	1	1	6	A6	0	\N	\N
 1	1	1	8	A8	0	\N	\N
 1	1	1	9	A9	0	\N	\N
 1	1	1	10	A10	0	\N	\N
@@ -730,7 +728,6 @@ COPY public.users (user_id, user_name, user_email, user_password, user_phone_no,
 8	Harish Kumar	harish.kumar@web.com	admin456	9876501234	Sector 15, Gurgaon
 9	Isha Mehta	isha.mehta@mail.co	sunshine	9123004567	Plot 8, Noida
 10	Jayant Rai	jayant.rai@alpha.com	iloveSQL	9800114455	House 101, Hyderabad
-12	Veena Sirohi	veena@example.com	secret123	8876543210	123 Main Street
 \.
 
 
