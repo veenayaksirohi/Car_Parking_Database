@@ -1,0 +1,13 @@
+
+---
+config:
+  layout: dagre
+  look: handDrawn
+  theme: default
+---
+flowchart TB
+    PL["parkinglots_details"] -- 1:N --> F["floors"]
+    F -- 1:N --> R["rows"]
+    R -- 1:N --> S["slots"]
+    S -- 1:N --> PS["parking_sessions"]
+    U["users"] -- 1:N --> PS
