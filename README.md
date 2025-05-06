@@ -360,40 +360,43 @@ erDiagram
 | slots                | parking_sessions    | 1:N               | parking_sessions.(...) → slots                      |
 | users                | parking_sessions    | 1:N               | parking_sessions.user_id → users                    |
 
-## Schema Details
+## 📦 Schema Details
 
-#### parkinglots\_details
 
-| Column                         | Data Type | Constraints  |
-| ------------------------------ | --------- | ------------ |
-| parkinglot\_id                 | integer   | Not Null, PK |
-| parking\_name                  | text      |              |
-| city                           | text      |              |
-| landmark                       | text      |              |
-| address                        | text      |              |
-| latitude                       | numeric   |              |
-| longitude                      | numeric   |              |
-| physical\_appearance           | text      |              |
-| parking\_ownership             | text      |              |
-| parking\_surface               | text      |              |
-| has\_cctv                      | text      |              |
-| has\_boom\_barrier             | text      |              |
-| ticket\_generated              | text      |              |
-| entry\_exit\_gates             | text      |              |
-| weekly\_off                    | text      |              |
-| parking\_timing                | text      |              |
-| vehicle\_types                 | text      |              |
-| car\_capacity                  | integer   |              |
-| available\_car\_slots          | integer   |              |
-| two\_wheeler\_capacity         | integer   |              |
-| available\_two\_wheeler\_slots | integer   |              |
-| parking\_type                  | text      |              |
-| payment\_modes                 | text      |              |
-| car\_parking\_charge           | text      |              |
-| two\_wheeler\_parking\_charge  | text      |              |
-| allows\_prepaid\_passes        | text      |              |
-| provides\_valet\_services      | text      |              |
-| value\_added\_services         | text      |              |
+### 🅿️ `parkinglots_details`
+
+| Column                        | Data Type | Constraints      |
+| ----------------------------- | --------- | ---------------- |
+| `parkinglot_id`               | integer   | **PK**, Not Null |
+| `parking_name`                | text      |                  |
+| `city`                        | text      |                  |
+| `landmark`                    | text      |                  |
+| `address`                     | text      |                  |
+| `latitude`                    | numeric   |                  |
+| `longitude`                   | numeric   |                  |
+| `physical_appearance`         | text      |                  |
+| `parking_ownership`           | text      |                  |
+| `parking_surface`             | text      |                  |
+| `has_cctv`                    | text      |                  |
+| `has_boom_barrier`            | text      |                  |
+| `ticket_generated`            | text      |                  |
+| `entry_exit_gates`            | text      |                  |
+| `weekly_off`                  | text      |                  |
+| `parking_timing`              | text      |                  |
+| `vehicle_types`               | text      |                  |
+| `car_capacity`                | integer   |                  |
+| `available_car_slots`         | integer   |                  |
+| `two_wheeler_capacity`        | integer   |                  |
+| `available_two_wheeler_slots` | integer   |                  |
+| `parking_type`                | text      |                  |
+| `payment_modes`               | text      |                  |
+| `car_parking_charge`          | text      |                  |
+| `two_wheeler_parking_charge`  | text      |                  |
+| `allows_prepaid_passes`       | text      |                  |
+| `provides_valet_services`     | text      |                  |
+| `value_added_services`        | text      |                  |
+
+**Primary Key:** (`parkinglot_id`)
 
 **Example data:**
 
@@ -402,13 +405,17 @@ erDiagram
 | 2              | Azadpur Complex    | New Delhi | CinemaLand  | Main St | 28.7097  | 77.1779   | Open-Covered         | Government         | Mud              | No        | No                 | No ticket         | MultiGate          | AllDays     | 00:00-24:00     | Car,2W         | 200           | 200                   | 250                    | 250                            | Free          | Cash           | 20/hr                | 10/hr                         | No                      | No                        | None                   |
 | 3              | ISBT Kashmere Gate | New Delhi | Bus Station | 1st Ave | 28.6686  | 77.2295   | Open-Covered         | Government         | Cemented         | Yes       | No                 | No ticket         | MultiGate          | AllDays     | 07:00-23:00     | Car,2W         | 300           | 300                   | 400                    | 400                            | Free          | Cash           | 20/hr                | 10/hr                         | No                      | No                        | Guards                 |
 
-#### floors
 
-| Column         | Data Type   | Constraints                             |
-| -------------- | ----------- | --------------------------------------- |
-| parkinglot\_id | integer     | Not Null, PK, FK → parkinglots\_details |
-| floor\_id      | integer     | Not Null, PK                            |
-| floor\_name    | varchar(50) | Not Null                                |
+### 🏢 `floors`
+
+| Column          | Data Type   | Constraints                                           |
+| --------------- | ----------- | ----------------------------------------------------- |
+| `parkinglot_id` | integer     | **PK**, **FK → parkinglots\_details(parkinglot\_id)** |
+| `floor_id`      | integer     | **PK**                                                |
+| `floor_name`    | varchar(50) | Not Null                                              |
+
+**Primary Key:** (`parkinglot_id`, `floor_id`)
+**Foreign Key:** (`parkinglot_id`) → `parkinglots_details(parkinglot_id)`
 
 **Example data:**
 
@@ -417,14 +424,18 @@ erDiagram
 | 1              | 1         | Ground Floor   |
 | 1              | 2         | Basement Level |
 
-#### rows
 
-| Column         | Data Type   | Constraints               |
-| -------------- | ----------- | ------------------------- |
-| parkinglot\_id | integer     | Not Null, PK, FK → floors |
-| floor\_id      | integer     | Not Null, PK, FK → floors |
-| row\_id        | integer     | Not Null, PK              |
-| row\_name      | varchar(50) | Not Null                  |
+### 🪑 `rows`
+
+| Column          | Data Type   | Constraints                             |
+| --------------- | ----------- | --------------------------------------- |
+| `parkinglot_id` | integer     | **PK**, **FK → floors(parkinglot\_id)** |
+| `floor_id`      | integer     | **PK**, **FK → floors(floor\_id)**      |
+| `row_id`        | integer     | **PK**                                  |
+| `row_name`      | varchar(50) | Not Null                                |
+
+**Primary Key:** (`parkinglot_id`, `floor_id`, `row_id`)
+**Foreign Key:** (`parkinglot_id`, `floor_id`) → `floors(parkinglot_id, floor_id)`
 
 **Example data:**
 
@@ -433,20 +444,23 @@ erDiagram
 | 1              | 1         | 1       | Row A     |
 | 1              | 1         | 2       | Row B     |
 
-#### slots
 
-| Column           | Data Type   | Constraints                                    |
-| ---------------- | ----------- | ---------------------------------------------- |
-| parkinglot\_id   | integer     | Not Null, PK, FK → rows                        |
-| floor\_id        | integer     | Not Null, PK, FK → rows                        |
-| row\_id          | integer     | Not Null, PK, FK → rows                        |
-| slot\_id         | integer     | Not Null, PK                                   |
-| slot\_name       | varchar(50) | Not Null                                       |
-| status           | integer     | Default 0 (0=Free, 1=Occupied)                 |
-| vehicle\_reg\_no | varchar(20) | (Nullable)                                     |
-| ticket\_id       | varchar(50) | (Nullable, FK to parking\_sessions.ticket\_id) |
+### 🚗 `slots`
 
-The `status` column uses a check constraint: when `status=1`, both `vehicle_reg_no` and `ticket_id` must be NOT NULL; when `status=0`, they must be NULL (free slot).
+| Column           | Data Type   | Constraints                                  |
+| ---------------- | ----------- | -------------------------------------------- |
+| `parkinglot_id`  | integer     | **PK**, **FK → rows(parkinglot\_id)**        |
+| `floor_id`       | integer     | **PK**, **FK → rows(floor\_id)**             |
+| `row_id`         | integer     | **PK**, **FK → rows(row\_id)**               |
+| `slot_id`        | integer     | **PK**                                       |
+| `slot_name`      | varchar(50) | Not Null                                     |
+| `status`         | integer     | Default 0 (Check: 0 = Free, 1 = Occupied)    |
+| `vehicle_reg_no` | varchar(20) | Nullable (Must be NOT NULL if status = 1)    |
+| `ticket_id`      | varchar(50) | Nullable (FK → `parking_sessions.ticket_id`) |
+
+**Primary Key:** (`parkinglot_id`, `floor_id`, `row_id`, `slot_id`)
+**Foreign Key:** (`parkinglot_id`, `floor_id`, `row_id`) → `rows(parkinglot_id, floor_id, row_id)`
+**Foreign Key:** (`ticket_id`) → `parking_sessions(ticket_id)` *(nullable)*
 
 **Example data:**
 
@@ -455,16 +469,23 @@ The `status` column uses a check constraint: when `status=1`, both `vehicle_reg_
 | 1              | 1         | 1       | 1        | A1         | 0      |                  |            |
 | 1              | 1         | 1       | 2        | A2         | 1      | ABC123           | T001       |
 
-#### users
+**Check Constraint:**
+If `status = 1` → `vehicle_reg_no` and `ticket_id` must be NOT NULL.
+If `status = 0` → `vehicle_reg_no` and `ticket_id` must be NULL.
 
-| Column          | Data Type    | Constraints                   |
-| --------------- | ------------ | ----------------------------- |
-| user\_id        | integer      | Not Null, PK (auto-generated) |
-| user\_name      | varchar(100) | Not Null                      |
-| user\_email     | varchar(100) | Not Null, Unique              |
-| user\_password  | varchar(100) | Not Null                      |
-| user\_phone\_no | varchar(15)  | Not Null, Unique              |
-| user\_address   | text         | (Nullable)                    |
+
+### 👤 `users`
+
+| Column          | Data Type    | Constraints            |
+| --------------- | ------------ | ---------------------- |
+| `user_id`       | integer      | **PK**, auto-increment |
+| `user_name`     | varchar(100) | Not Null               |
+| `user_email`    | varchar(100) | Not Null, **Unique**   |
+| `user_password` | varchar(100) | Not Null               |
+| `user_phone_no` | varchar(15)  | Not Null, **Unique**   |
+| `user_address`  | text         | Nullable               |
+
+**Primary Key:** (`user_id`)
 
 **Example data:**
 
@@ -473,22 +494,26 @@ The `status` column uses a check constraint: when `status=1`, both `vehicle_reg_
 | 1        | Alice      | [alice@example.com](mailto:alice@example.com) | password123    | 1234567890      | 123 Main St   |
 | 2        | Bob        | [bob@example.com](mailto:bob@example.com)     | securepwd      | 0987654321      | 456 Oak Ave   |
 
-#### parking\_sessions
 
-| Column           | Data Type                   | Constraints                                       |
-| ---------------- | --------------------------- | ------------------------------------------------- |
-| ticket\_id       | varchar(50)                 | Not Null, PK                                      |
-| parkinglot\_id   | integer                     | FK → slots                                        |
-| floor\_id        | integer                     | FK → slots                                        |
-| row\_id          | integer                     | FK → slots                                        |
-| slot\_id         | integer                     | FK → slots                                        |
-| vehicle\_reg\_no | varchar(20)                 | Not Null                                          |
-| user\_id         | integer                     | FK → users                                        |
-| start\_time      | timestamp without time zone |                                                   |
-| end\_time        | timestamp without time zone |                                                   |
-| duration\_hrs    | numeric (GENERATED STORED)  | Computed as round((end\_time-start\_time)/3600,1) |
 
-*Note:* The `duration_hrs` column is a generated (computed) column that calculates the parking duration in hours.
+### 🎫 `parking_sessions`
+
+| Column           | Data Type                   | Constraints                                        |
+| ---------------- | --------------------------- | -------------------------------------------------- |
+| `ticket_id`      | varchar(50)                 | **PK**                                             |
+| `parkinglot_id`  | integer                     | **FK → slots(parkinglot\_id)**                     |
+| `floor_id`       | integer                     | **FK → slots(floor\_id)**                          |
+| `row_id`         | integer                     | **FK → slots(row\_id)**                            |
+| `slot_id`        | integer                     | **FK → slots(slot\_id)**                           |
+| `vehicle_reg_no` | varchar(20)                 | Not Null                                           |
+| `user_id`        | integer                     | **FK → users(user\_id)**                           |
+| `start_time`     | timestamp without time zone |                                                    |
+| `end_time`       | timestamp without time zone |                                                    |
+| `duration_hrs`   | numeric (GENERATED STORED)  | Computed: `ROUND((end_time - start_time)/3600, 1)` |
+
+**Primary Key:** (`ticket_id`)
+**Foreign Key:** (`parkinglot_id`, `floor_id`, `row_id`, `slot_id`) → `slots(parkinglot_id, floor_id, row_id, slot_id)`
+**Foreign Key:** (`user_id`) → `users(user_id)`
 
 **Example data:**
 
@@ -496,6 +521,16 @@ The `status` column uses a check constraint: when `status=1`, both `vehicle_reg_
 | ---------- | -------------- | --------- | ------- | -------- | ---------------- | -------- | ------------------- | ------------------- | ------------- |
 | T001       | 1              | 1         | 1       | 2        | ABC123           | 1        | 2025-05-01 08:00:00 | 2025-05-01 10:00:00 | 2.0           |
 | T002       | 1              | 1         | 2       | 1        | XYZ789           | 2        | 2025-05-02 14:15:00 | 2025-05-02 16:45:00 | 2.5           |
+
+
+## 🧩 Composite Key Summary
+
+| Table              | Composite Primary Key                              | Foreign Keys                                                                      |
+| ------------------ | -------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `floors`           | (`parkinglot_id`, `floor_id`)                      | `parkinglot_id` → `parkinglots_details`                                           |
+| `rows`             | (`parkinglot_id`, `floor_id`, `row_id`)            | (`parkinglot_id`, `floor_id`) → `floors`                                          |
+| `slots`            | (`parkinglot_id`, `floor_id`, `row_id`, `slot_id`) | (`parkinglot_id`, `floor_id`, `row_id`) → `rows`                                  |
+| `parking_sessions` | `ticket_id`                                        | (`parkinglot_id`, `floor_id`, `row_id`, `slot_id`) → `slots`; `user_id` → `users` |
 
 ## Additional Notes
 
