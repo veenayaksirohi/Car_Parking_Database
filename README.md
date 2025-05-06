@@ -1,4 +1,4 @@
-# Parking Management System Database
+# Car_Parking_Database
 
 This project provides a PostgreSQL database schema for a parking management system. It includes tables for parking lot details, floors, rows of slots, individual slots, users, and parking sessions. The schema enforces primary and foreign keys to maintain referential integrity, check constraints on slot occupancy status, and unique constraints on user email/phone. Sample data populates parking lot details and floors. The repository also contains ER diagrams (Mermaid and PNG) and a detailed ERD description to explain the design.
 
