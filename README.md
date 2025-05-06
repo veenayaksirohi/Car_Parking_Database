@@ -268,9 +268,7 @@ erDiagram
 
 ```
 
-# Detailed Table Relationships in Parking Management System
-
-# Summary Table
+# Table Relationships 
 
 | Parent Table         | Child Table         | Relationship Type | Foreign Key(s)                                       |
 |----------------------|---------------------|-------------------|------------------------------------------------------|
