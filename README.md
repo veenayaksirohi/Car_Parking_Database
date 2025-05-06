@@ -28,7 +28,7 @@ Use this database to manage parking lots, floors, rows, slots, users, and parkin
 2. Clone this repository:
 
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/veenayaksirohi/Car_Parking_Database.git
    cd <repository_folder>
    ```
 3. Create a new database:
