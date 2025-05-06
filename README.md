@@ -18,31 +18,39 @@
 
  
 ## Table of Contents
-
-* [Installation](#installation)
-* [Database Setup](#database-setup)
-* [Database Design](#database-design)
-
-  * [High-Level Design](#high-level-design)
-  * [Low-Level Design](#low-level-design)
-  * [Table-Relationships](#Table-Relationships)
-* [Schema Details](#schema-details)
-
-  * [parkinglots\_details](#parkinglots_details)
-  * [floors](#floors)
-  * [rows](#rows)
-  * [slots](#slots)
-  * [users](#users)
-  * [parking\_sessions](#parking_sessions)
-* [Additional Notes](#additional-notes)
-Certainly! Here's an improved version of your PostgreSQL installation guide in Markdown format, tailored for **Windows**, **macOS**, and **Linux** users:
+- [🚗 Car\_Parking\_Database – PostgreSQL Schema](#-car_parking_database--postgresql-schema)
+  - [Table of Contents](#table-of-contents)
+  - [🐘 PostgreSQL Installation Guide](#-postgresql-installation-guide)
+    - [🪟 Windows](#-windows)
+    - [🍎 macOS](#-macos)
+    - [Install via Homebrew (Recommended)](#install-via-homebrew-recommended)
+    - [🐧 Ubuntu / Debian Linux](#-ubuntu--debian-linux)
+  - [Database Setup](#database-setup)
+    - [1. Create a New Database](#1-create-a-new-database)
+    - [2. Import the Schema via Command Line](#2-import-the-schema-via-command-line)
+    - [3. Import the Schema via pgAdmin 4](#3-import-the-schema-via-pgadmin-4)
+    - [4. Verify the Import](#4-verify-the-import)
+  - [Database Design](#database-design)
+    - [High-Level Design](#high-level-design)
+    - [Low-Level Design](#low-level-design)
+    - [Table-Relationships](#table-relationships)
+  - [📦 Schema Details](#-schema-details)
+    - [🅿️ `parkinglots_details`](#️-parkinglots_details)
+    - [🏢 `floors`](#-floors)
+    - [🪑 `rows`](#-rows)
+    - [🚗 `slots`](#-slots)
+    - [👤 `users`](#-users)
+    - [🎫 `parking_sessions`](#-parking_sessions)
+  - [🧩 Composite Key Summary](#-composite-key-summary)
+  - [Additional Notes](#additional-notes)
+      - [References](#references)
 
 
 ## 🐘 PostgreSQL Installation Guide
 
 PostgreSQL is a robust, open-source relational database available on Windows, macOS, and Linux. This guide walks you through installing PostgreSQL on each platform and then shows you how to import your `parking_database_backup.sql` (which only works via the `psql` client).
 
-## 🪟 Windows
+### 🪟 Windows
 
 1. **Download the EDB Installer**
    Visit the official PostgreSQL Windows download page and grab the Interactive Installer maintained by EnterpriseDB.
@@ -52,7 +60,7 @@ PostgreSQL is a robust, open-source relational database available on Windows, ma
    Open **SQL Shell (psql)**, press Enter for host/port/database/user/password defaults. Seeing the `postgres=#` prompt confirms success.
 
 
-## 🍎 macOS
+### 🍎 macOS
 
 ### Install via Homebrew (Recommended)
 
@@ -83,7 +91,7 @@ PostgreSQL is a robust, open-source relational database available on Windows, ma
    ```
 
 
-## 🐧 Ubuntu / Debian Linux
+### 🐧 Ubuntu / Debian Linux
 
 1. **Add PostgreSQL Apt Repository** (optional, for latest versions):
 
