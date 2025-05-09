@@ -1,4 +1,4 @@
-# 🚗 Car_Parking_Database – PostgreSQL Schema 🛢️ [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=flat&logo=github)](https://github.com)  [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-336791?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+# 🚗 Car_Parking_Database – PostgreSQL Schema 🛢️ [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=flat&logo=github)](https://github.com)  [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17+-336791?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
 * **Database Structure** 📊:
 
@@ -23,7 +23,6 @@
   - [🐘 PostgreSQL Installation Guide](#-postgresql-installation-guide)
     - [🪟 Windows](#-windows)
     - [🍎 macOS](#-macos)
-    - [Install via Homebrew (Recommended)](#install-via-homebrew-recommended)
     - [🐧 Ubuntu / Debian Linux](#-ubuntu--debian-linux)
   - [Database Setup 💾](#database-setup-)
     - [1. Create a New Database](#1-create-a-new-database)
@@ -43,12 +42,12 @@
     - [🎫 `parking_sessions`](#-parking_sessions)
   - [🧩 Composite Key Summary](#-composite-key-summary)
   - [Additional Notes 📝](#additional-notes-)
-      - [References 📚](#references-)
+    - [References 📚](#references-)
 
 
 ## 🐘 PostgreSQL Installation Guide
 
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17+-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
 PostgreSQL is a robust, open-source relational database available on Windows, macOS, and Linux. This guide walks you through installing PostgreSQL on each platform and then shows you how to import your `parking_database_backup.sql` (which only works via the `psql` client).
 
@@ -64,8 +63,6 @@ PostgreSQL is a robust, open-source relational database available on Windows, ma
 
 ### 🍎 macOS
 
-### Install via Homebrew (Recommended)
-
 1. **Install Homebrew** (if not already present):
 
    ```bash
@@ -76,13 +73,13 @@ PostgreSQL is a robust, open-source relational database available on Windows, ma
 
    ```bash
    brew update
-   brew install postgresql
+   brew install postgresql@17
    ```
 
 3. **Start the Service**:
 
    ```bash
-   brew services start postgresql
+   brew services start postgresql@17
    ```
 
 4. **Verify Installation**:
@@ -95,18 +92,18 @@ PostgreSQL is a robust, open-source relational database available on Windows, ma
 
 ### 🐧 Ubuntu / Debian Linux
 
-1. **Add PostgreSQL Apt Repository** (optional, for latest versions):
+1. **Add PostgreSQL Apt Repository** (for PostgreSQL 17):
 
    ```bash
-   sudo apt install -y postgresql-common
-   sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+   sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+   wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
    ```
 
 2. **Install PostgreSQL**:
 
    ```bash
    sudo apt update
-   sudo apt install -y postgresql postgresql-contrib
+   sudo apt install -y postgresql-17 postgresql-contrib-17
    ```
 
 3. **Enable and Start Service**:
@@ -130,17 +127,25 @@ This section outlines how to create a new PostgreSQL database and import the pro
 
 ### 1. Create a New Database
 
-
 Use the PostgreSQL superuser (`postgres`) to create an empty database (e.g., `parking_db`):
 
 ```bash
+# Connect as postgres user
+sudo -u postgres psql
+
+# Inside psql, create database
+CREATE DATABASE parking_db;
+
+# Exit psql
+\q
+
+# Alternative one-liner
 sudo -u postgres createdb parking_db
 ```
 
-This invokes the `createdb` utility, a wrapper around the SQL command `CREATE DATABASE`, and makes the executing user the owner of the new database.
+This creates a new database named `parking_db` and makes the executing user the owner of the new database.
 
 ### 2. Import the Schema via Command Line
-
 
 Once the database exists, import the SQL dump using `psql` in one of two ways:
 
@@ -154,7 +159,6 @@ Once the database exists, import the SQL dump using `psql` in one of two ways:
 
 * **Using input redirection**
 
-
   ```bash
   psql --username=postgres parking_db < parking_database_backup.sql
   ```
@@ -166,11 +170,11 @@ Once the database exists, import the SQL dump using `psql` in one of two ways:
 
 ### 3. Import the Schema via pgAdmin 4
 
-
 1. **Connect & Select Database**
 
    * Open pgAdmin 4 and connect to your PostgreSQL server.
    * In the **Browser** pane, right-click the **Databases** node and choose **Create → Database…** if `parking_db` doesn't exist yet.
+   * Fill in the database name as `parking_db` and click Save.
 
 2. **Open the Query Tool**
 
@@ -183,52 +187,27 @@ Once the database exists, import the SQL dump using `psql` in one of two ways:
 
 ### 4. Verify the Import
 
-
 * **In `psql`**:
 
-
   ```sql
+  # Connect to the database
+  psql -U postgres -d parking_db
+  
+  # List all tables
   \dt
+  
+  # Count rows in a specific table
+  SELECT COUNT(*) FROM parkinglots_details;
+  
+  # Exit psql
+  \q
   ```
 
   Lists all tables in the current database.
 
 * **In pgAdmin**:
-
   
   Refresh the **Schemas → public → Tables** node to see the newly created tables and sample data.
-
-1. **Create a Database:** Using the `postgres` superuser, create a new database (e.g., `parking_db`):
-
-   ```bash
-   sudo -u postgres createdb parking_db
-   ```
-2. **Import the Schema:** You can import the provided SQL dump (`parking_database_backup.sql`) using either the command line or pgAdmin:
-
-   * **Command Line (psql):**
-     Ensure the target database exists, then run:
-
-     ```bash
-     psql -U postgres -d parking_db -f parking_database_backup.sql
-     ```
-
-     This executes the SQL script and sets up all tables and sample data. Alternatively, you can use input redirection:
-
-     ```bash
-     psql --username=postgres parking_db < parking_database_backup.sql
-     ```
-
-     (Note: the database must be created beforehand).
-
-   * **pgAdmin 4:**
-
-     1. Open pgAdmin and connect to your server.
-     2. Create or select the target database (e.g., `parking_db`).
-     3. Click **Tools > Query Tool**.
-     4. In the Query Tool, click the open-file icon (📂), browse to `parking_database_backup.sql`, and open it.
-     5. Execute the script by clicking the lightning-bolt icon (➤). This will run all SQL commands from the file and populate the database.
-
-After import, you can run `\dt` in psql or refresh pgAdmin to see the created tables and data.
 
 
 ## Database Design 🏗️
@@ -379,38 +358,42 @@ erDiagram
 
 ### 🅿️ `parkinglots_details`
 
-| Column                        | Data Type | Constraints      | Est. Rows | Col Count |
-| ----------------------------- | --------- | ---------------- | --------- | --------- |
-| `parkinglot_id`               | integer   | **PK**, Not Null | 10-50     | 27        |
-| `parking_name`                | text      |                  |           |           |
-| `city`                        | text      |                  |           |           |
-| `landmark`                    | text      |                  |           |           |
-| `address`                     | text      |                  |           |           |
-| `latitude`                    | numeric   |                  |           |           |
-| `longitude`                   | numeric   |                  |           |           |
-| `physical_appearance`         | text      |                  |           |           |
-| `parking_ownership`           | text      |                  |           |           |
-| `parking_surface`             | text      |                  |           |           |
-| `has_cctv`                    | text      |                  |           |           |
-| `has_boom_barrier`            | text      |                  |           |           |
-| `ticket_generated`            | text      |                  |           |           |
-| `entry_exit_gates`            | text      |                  |           |           |
-| `weekly_off`                  | text      |                  |           |           |
-| `parking_timing`              | text      |                  |           |           |
-| `vehicle_types`               | text      |                  |           |           |
-| `car_capacity`                | integer   |                  |           |           |
-| `available_car_slots`         | integer   |                  |           |           |
-| `two_wheeler_capacity`        | integer   |                  |           |           |
-| `available_two_wheeler_slots` | integer   |                  |           |           |
-| `parking_type`                | text      |                  |           |           |
-| `payment_modes`               | text      |                  |           |           |
-| `car_parking_charge`          | text      |                  |           |           |
-| `two_wheeler_parking_charge`  | text      |                  |           |           |
-| `allows_prepaid_passes`       | text      |                  |           |           |
-| `provides_valet_services`     | text      |                  |           |           |
-| `value_added_services`        | text      |                  |           |           |
+| Column                        | Data Type | Constraints      |
+| ----------------------------- | --------- | ---------------- |
+| `parkinglot_id`               | integer   | **PK**, Not Null |
+| `parking_name`                | text      |                  |
+| `city`                        | text      |                  |
+| `landmark`                    | text      |                  |
+| `address`                     | text      |                  |
+| `latitude`                    | numeric   |                  |
+| `longitude`                   | numeric   |                  |
+| `physical_appearance`         | text      |                  |
+| `parking_ownership`           | text      |                  |
+| `parking_surface`             | text      |                  |
+| `has_cctv`                    | text      |                  |
+| `has_boom_barrier`            | text      |                  |
+| `ticket_generated`            | text      |                  |
+| `entry_exit_gates`            | text      |                  |
+| `weekly_off`                  | text      |                  |
+| `parking_timing`              | text      |                  |
+| `vehicle_types`               | text      |                  |
+| `car_capacity`                | integer   |                  |
+| `available_car_slots`         | integer   |                  |
+| `two_wheeler_capacity`        | integer   |                  |
+| `available_two_wheeler_slots` | integer   |                  |
+| `parking_type`                | text      |                  |
+| `payment_modes`               | text      |                  |
+| `car_parking_charge`          | text      |                  |
+| `two_wheeler_parking_charge`  | text      |                  |
+| `allows_prepaid_passes`       | text      |                  |
+| `provides_valet_services`     | text      |                  |
+| `value_added_services`        | text      |                  |
 
 **Primary Key:** (`parkinglot_id`)
+
+|No. of rows|No. of Cols.|
+|-----------|------------|
+|87         |28          |
 
 **Example data:**
 
@@ -422,14 +405,17 @@ erDiagram
 
 ### 🏢 `floors`
 
-| Column          | Data Type   | Constraints                                           | Est. Rows | Col Count |
-| --------------- | ----------- | ----------------------------------------------------- | --------- | --------- |
-| `parkinglot_id` | integer     | **PK**, **FK → parkinglots\_details(parkinglot\_id)** | 50-200    | 3         |
-| `floor_id`      | integer     | **PK**                                                |           |           |
-| `floor_name`    | varchar(50) | Not Null                                              |           |           |
+| Column          | Data Type   | Constraints                                           |
+| --------------- | ----------- | ----------------------------------------------------- |
+| `parkinglot_id` | integer     | **PK**, **FK → parkinglots\_details(parkinglot\_id)** |
+| `floor_id`      | integer     | **PK**                                                |
+| `floor_name`    | varchar(50) | Not Null                                              |
 
 **Primary Key:** (`parkinglot_id`, `floor_id`)
 **Foreign Key:** (`parkinglot_id`) → `parkinglots_details(parkinglot_id)`
+|No. of rows|No. of Cols.|
+|-----------|------------|
+|10         |3           |
 
 **Example data:**
 
@@ -441,15 +427,18 @@ erDiagram
 
 ### 🪑 `rows`
 
-| Column          | Data Type   | Constraints                             | Est. Rows | Col Count |
-| --------------- | ----------- | --------------------------------------- | --------- | --------- |
-| `parkinglot_id` | integer     | **PK**, **FK → floors(parkinglot\_id)** | 200-1000  | 4         |
-| `floor_id`      | integer     | **PK**, **FK → floors(floor\_id)**      |           |           |
-| `row_id`        | integer     | **PK**                                  |           |           |
-| `row_name`      | varchar(50) | Not Null                                |           |           |
+| Column          | Data Type   | Constraints                             |
+| --------------- | ----------- | --------------------------------------- |
+| `parkinglot_id` | integer     | **PK**, **FK → floors(parkinglot\_id)** |
+| `floor_id`      | integer     | **PK**, **FK → floors(floor\_id)**      |
+| `row_id`        | integer     | **PK**                                  |
+| `row_name`      | varchar(50) | Not Null                                |
 
 **Primary Key:** (`parkinglot_id`, `floor_id`, `row_id`)
 **Foreign Key:** (`parkinglot_id`, `floor_id`) → `floors(parkinglot_id, floor_id)`
+|No. of rows|No. of Cols.|
+|-----------|------------|
+|20         |4           |
 
 **Example data:**
 
@@ -461,20 +450,24 @@ erDiagram
 
 ### 🚗 `slots`
 
-| Column           | Data Type   | Constraints                                  | Est. Rows | Col Count |
-| ---------------- | ----------- | -------------------------------------------- | --------- | --------- |
-| `parkinglot_id`  | integer     | **PK**, **FK → rows(parkinglot\_id)**        | 1000-5000 | 8         |
-| `floor_id`       | integer     | **PK**, **FK → rows(floor\_id)**             |           |           |
-| `row_id`         | integer     | **PK**, **FK → rows(row\_id)**               |           |           |
-| `slot_id`        | integer     | **PK**                                       |           |           |
-| `slot_name`      | varchar(50) | Not Null                                     |           |           |
-| `status`         | integer     | Default 0 (Check: 0 = Free, 1 = Occupied)    |           |           |
-| `vehicle_reg_no` | varchar(20) | Nullable (Must be NOT NULL if status = 1)    |           |           |
-| `ticket_id`      | varchar(50) | Nullable (FK → `parking_sessions.ticket_id`) |           |           |
+| Column           | Data Type   | Constraints                                  |
+| ---------------- | ----------- | -------------------------------------------- |
+| `parkinglot_id`  | integer     | **PK**, **FK → rows(parkinglot\_id)**        |
+| `floor_id`       | integer     | **PK**, **FK → rows(floor\_id)**             |
+| `row_id`         | integer     | **PK**, **FK → rows(row\_id)**               |
+| `slot_id`        | integer     | **PK**                                       |
+| `slot_name`      | varchar(50) | Not Null                                     |
+| `status`         | integer     | Default 0 (Check: 0 = Free, 1 = Occupied)    |
+| `vehicle_reg_no` | varchar(20) | Nullable (Must be NOT NULL if status = 1)    |
+| `ticket_id`      | varchar(50) | Nullable (FK → `parking_sessions.ticket_id`) |
+
 
 **Primary Key:** (`parkinglot_id`, `floor_id`, `row_id`, `slot_id`)
 **Foreign Key:** (`parkinglot_id`, `floor_id`, `row_id`) → `rows(parkinglot_id, floor_id, row_id)`
 **Foreign Key:** (`ticket_id`) → `parking_sessions(ticket_id)` *(nullable)*
+|No. of rows|No. of Cols.|
+|-----------|------------|
+|400        |8           |
 
 **Example data:**
 
@@ -490,16 +483,19 @@ If `status = 0` → `vehicle_reg_no` and `ticket_id` must be NULL.
 
 ### 👤 `users`
 
-| Column          | Data Type    | Constraints            | Est. Rows | Col Count |
-| --------------- | ------------ | ---------------------- | --------- | --------- |
-| `user_id`       | integer      | **PK**, auto-increment | 100-10000 | 6         |
-| `user_name`     | varchar(100) | Not Null               |           |           |
-| `user_email`    | varchar(100) | Not Null, **Unique**   |           |           |
-| `user_password` | varchar(100) | Not Null               |           |           |
-| `user_phone_no` | varchar(15)  | Not Null, **Unique**   |           |           |
-| `user_address`  | text         | Nullable               |           |           |
+| Column          | Data Type    | Constraints            |
+| --------------- | ------------ | ---------------------- |
+| `user_id`       | integer      | **PK**, auto-increment |
+| `user_name`     | varchar(100) | Not Null               |
+| `user_email`    | varchar(100) | Not Null, **Unique**   |
+| `user_password` | varchar(100) | Not Null               |
+| `user_phone_no` | varchar(15)  | Not Null, **Unique**   |
+| `user_address`  | text         | Nullable               |
 
 **Primary Key:** (`user_id`)
+|No. of rows|No. of Cols.|
+|-----------|------------|
+|10         |6           |
 
 **Example data:**
 
@@ -512,22 +508,25 @@ If `status = 0` → `vehicle_reg_no` and `ticket_id` must be NULL.
 
 ### 🎫 `parking_sessions`
 
-| Column           | Data Type                   | Constraints                                        | Est. Rows | Col Count |
-| ---------------- | --------------------------- | -------------------------------------------------- | --------- | --------- |
-| `ticket_id`      | varchar(50)                 | **PK**                                             | 1000+     | 10        |
-| `parkinglot_id`  | integer                     | **FK → slots(parkinglot\_id)**                     |           |           |
-| `floor_id`       | integer                     | **FK → slots(floor\_id)**                          |           |           |
-| `row_id`         | integer                     | **FK → slots(row\_id)**                            |           |           |
-| `slot_id`        | integer                     | **FK → slots(slot\_id)**                           |           |           |
-| `vehicle_reg_no` | varchar(20)                 | Not Null                                           |           |           |
-| `user_id`        | integer                     | **FK → users(user\_id)**                           |           |           |
-| `start_time`     | timestamp without time zone |                                                    |           |           |
-| `end_time`       | timestamp without time zone |                                                    |           |           |
-| `duration_hrs`   | numeric (GENERATED STORED)  | Computed: `ROUND((end_time - start_time)/3600, 1)` |           |           |
+| Column           | Data Type                   | Constraints                                        |
+| ---------------- | --------------------------- | -------------------------------------------------- |
+| `ticket_id`      | varchar(50)                 | **PK**                                             |
+| `parkinglot_id`  | integer                     | **FK → slots(parkinglot\_id)**                     |
+| `floor_id`       | integer                     | **FK → slots(floor\_id)**                          |
+| `row_id`         | integer                     | **FK → slots(row\_id)**                            |
+| `slot_id`        | integer                     | **FK → slots(slot\_id)**                           |
+| `vehicle_reg_no` | varchar(20)                 | Not Null                                           |
+| `user_id`        | integer                     | **FK → users(user\_id)**                           |
+| `start_time`     | timestamp without time zone |                                                    |
+| `end_time`       | timestamp without time zone |                                                    |
+| `duration_hrs`   | numeric (GENERATED STORED)  | Computed: `ROUND((end_time - start_time)/3600, 1)` |
 
 **Primary Key:** (`ticket_id`)
 **Foreign Key:** (`parkinglot_id`, `floor_id`, `row_id`, `slot_id`) → `slots(parkinglot_id, floor_id, row_id, slot_id)`
 **Foreign Key:** (`user_id`) → `users(user_id)`
+|No. of rows|No. of Cols.|
+|-----------|------------|
+|0          |0          |
 
 **Example data:**
 
@@ -551,7 +550,12 @@ If `status = 0` → `vehicle_reg_no` and `ticket_id` must be NULL.
 [![Notes](https://img.shields.io/badge/Additional-Notes-brightgreen?style=flat&logo=notion&logoColor=white)](https://github.com)
 
 * **Constraints & Integrity** 🔐: The database uses composite primary keys (`parkinglot_id` + `floor_id`, etc.) to uniquely identify sub-entities. Foreign key constraints enforce that, for example, a **floor** cannot exist without its parent **parking lot**, and a **slot** cannot exist without its parent **row**. Unique constraints on user email and phone ensure no duplicates.
-* **Performance** ⚡: For large datasets, consider adding indexes on foreign key columns (e.g. `parkinglot_id`, `user_id`) to speed up joins. PostgreSQL automatically indexes primary keys.
+* **Performance** ⚡: For large datasets, consider adding indexes on foreign key columns (e.g., `parkinglot_id`, `user_id`) to speed up joins. PostgreSQL automatically indexes primary keys.
 * **Data Import** 📥: Always wrap bulk import scripts in a transaction or use `BEGIN/COMMIT` to ensure atomicity. The provided dump can be loaded in one step as shown above.
 * **Maintenance** 🧰: After major data changes, run `VACUUM ANALYZE` to update query planner statistics. Regularly back up your database (using `pg_dump` or continuous backups).
 * **Extensibility** 🔄: The schema is normalized to 3NF. You can extend it by adding new tables (e.g. `payments`, `pass_holders`) with appropriate foreign keys. The ERD (Fig.
+
+### References 📚
+- [PostgreSQL 17 Documentation](https://www.postgresql.org/docs/17/)
+- [PostgreSQL Index Types](https://www.postgresql.org/docs/17/indexes-types.html)
+- [Data Modeling Best Practices](https://www.postgresql.org/docs/17/ddl-schemas.html)
